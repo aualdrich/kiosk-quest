@@ -37,8 +37,10 @@ This app is configured as API-only, so it uses `ActionController::API` and skips
 ## Running Tests
 
 ```bash
-bin/rails test
+bundle exec rspec
 ```
+
+This repository uses RSpec for testing.
 
 ## Notes
 
