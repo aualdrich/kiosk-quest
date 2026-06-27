@@ -1,9 +1,7 @@
 station_1:
   id: 1
   name: Station 1
-  load_seconds: 0
 
 station_2:
   id: 2
   name: Station 2
-  load_seconds: 0

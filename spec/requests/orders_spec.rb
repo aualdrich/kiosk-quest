@@ -17,6 +17,7 @@ RSpec.describe "Orders" do
           as: :json
       end.to change(Order, :count).by(1)
         .and change(OrderItem, :count).by(3)
+        .and change(StationQueue, :count).by(3)
 
       expect(response).to have_http_status(:ok)
       # 2 x cheeseburger = 2 x 899 = 1_798
@@ -57,6 +58,10 @@ RSpec.describe "Orders" do
           [menu_items(:fries).id, 1],
           [menu_items(:milkshake).id, 1]
         ]
+      )
+      expect(order.station_queues.group(:station_id).sum(:load_seconds)).to eq(
+        1 => 180,
+        2 => 135
       )
     end
 

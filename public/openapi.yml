@@ -9,7 +9,7 @@ paths:
   /order:
     post:
       summary: Create an order
-      description: Creates a kiosk order, calculates pricing, and returns the prep estimate.
+      description: Creates a kiosk order, calculates pricing, assigns the order items across prep stations, and returns the per-order prep estimate.
       requestBody:
         required: true
         content:
@@ -64,6 +64,7 @@ paths:
                   estimated_prep_seconds:
                     type: integer
                   prep_schedule:
+                    description: Per-order station load pairs sorted by total prep seconds descending.
                     type: array
                     items:
                       type: array

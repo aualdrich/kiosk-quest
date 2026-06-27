@@ -36,6 +36,7 @@ RSpec.describe OrderPlacement do
       expect { @result = order_placement.call }
         .to change(Order, :count).by(1)
         .and change(OrderItem, :count).by(3)
+        .and change(StationQueue, :count).by(3)
 
       expect(@result).to have_attributes(success?: true, errors: [], order: be_present)
       # 2 x cheeseburger = 2 x 899 = 1_798
@@ -69,8 +70,10 @@ RSpec.describe OrderPlacement do
         ]
       )
 
-      expect(Station.find(1)).to have_attributes(load_seconds: 180)
-      expect(Station.find(2)).to have_attributes(load_seconds: 135)
+      expect(order.station_queues.group(:station_id).sum(:load_seconds)).to eq(
+        1 => 180,
+        2 => 135
+      )
     end
 
     it "returns errors without creating records when invalid" do
@@ -83,6 +86,7 @@ RSpec.describe OrderPlacement do
       expect { @result = order_placement.call }
         .to change(Order, :count).by(0)
         .and change(OrderItem, :count).by(0)
+        .and change(StationQueue, :count).by(0)
 
       expect(@result).to have_attributes(success?: false, order: nil)
       expect(@result.errors).to include("Quantity must be greater than 0")
@@ -99,6 +103,7 @@ RSpec.describe OrderPlacement do
       expect { @result = order_placement.call }
         .to change(Order, :count).by(0)
         .and change(OrderItem, :count).by(0)
+        .and change(StationQueue, :count).by(0)
 
       expect(@result).to have_attributes(success?: false, order: nil)
       expect(@result.errors).to eq(["Item ids must all exist"])
@@ -110,6 +115,7 @@ RSpec.describe OrderPlacement do
       expect { @result = order_placement.call }
         .to change(Order, :count).by(0)
         .and change(OrderItem, :count).by(0)
+        .and change(StationQueue, :count).by(0)
 
       expect(@result).to have_attributes(success?: false, order: nil)
       expect(@result.errors).to include("Order items can't be blank")

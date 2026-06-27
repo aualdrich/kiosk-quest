@@ -14,6 +14,7 @@ RSpec.describe OrderItem, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:order).required }
     it { is_expected.to belong_to(:menu_item).required }
+    it { is_expected.to have_one(:station_queue).dependent(:destroy) }
   end
 
   describe "validations" do

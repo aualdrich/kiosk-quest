@@ -20,22 +20,29 @@ class OrderPrepService
 
   attr_reader :order
 
-  # Assign the load of each order item to the station with the least load.
+  # Assign each order item to the least-loaded station for this order.
   def assign_station_load
     order.order_items.each do |order_item|
       line_prep = order_item.menu_item.prep_seconds * order_item.quantity
-      station = Station.by_lowest_load.first
+      station = Station.with_lowest_load_for(order)
 
-      station.load_seconds += line_prep
-      station.save!
+      order.station_queues.create!(
+        station: station,
+        order_item: order_item,
+        load_seconds: line_prep
+      )
     end
   end
 
   def estimated_prep_seconds
-    Station.maximum(:load_seconds)
+    station_loads.values.max || 0
   end
 
   def prep_schedule
-    Station.by_highest_load.pluck(:id, :load_seconds)
+    Station.by_highest_load_for(order)
+  end
+
+  def station_loads
+    Station.loads_for(order)
   end
 end

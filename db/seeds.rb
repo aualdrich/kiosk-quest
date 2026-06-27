@@ -23,8 +23,8 @@ menu_items.each do |attributes|
 end
 
 stations = [
-  { name: "Station 1", load_seconds: 0 },
-  { name: "Station 2", load_seconds: 0 }
+  { name: "Station 1" },
+  { name: "Station 2" }
 ]
 
 stations.each do |attributes|

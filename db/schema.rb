@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_27_000200) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_27_000300) do
   create_table "menu_items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -38,13 +38,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000200) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "station_queues", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "load_seconds", null: false
+    t.integer "order_id", null: false
+    t.integer "order_item_id", null: false
+    t.integer "station_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_station_queues_on_order_id"
+    t.index ["order_item_id"], name: "index_station_queues_on_order_item_id", unique: true
+    t.index ["station_id"], name: "index_station_queues_on_station_id"
+  end
+
   create_table "stations", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.integer "load_seconds", default: 0, null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "order_items", "menu_items"
   add_foreign_key "order_items", "orders"
+  add_foreign_key "station_queues", "order_items"
+  add_foreign_key "station_queues", "orders"
+  add_foreign_key "station_queues", "stations"
 end

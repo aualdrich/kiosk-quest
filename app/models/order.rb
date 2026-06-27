@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
+  has_many :station_queues, dependent: :destroy
 
   validates :order_items, presence: true
   validates :subtotal_cents, presence: true, numericality: { greater_than: 0 }
