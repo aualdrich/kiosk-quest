@@ -7,3 +7,17 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+menu_items = [
+  { name: "Cheeseburger", price_cents: 899, prep_seconds: 90 },
+  { name: "Fries", price_cents: 399, prep_seconds: 60 },
+  { name: "Milkshake", price_cents: 499, prep_seconds: 75 },
+  { name: "Salad", price_cents: 699, prep_seconds: 45 },
+  { name: "Nuggets", price_cents: 599, prep_seconds: 80 }
+]
+
+menu_items.each do |attributes|
+  menu_item = MenuItem.find_or_initialize_by(name: attributes[:name])
+  menu_item.assign_attributes(attributes)
+  menu_item.save!
+end
