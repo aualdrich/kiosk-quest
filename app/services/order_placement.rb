@@ -28,7 +28,8 @@ class OrderPlacement
 
     ActiveRecord::Base.transaction do
       order.save!
-      order_items.each(&:save!)
+      save_order_items
+      prepare_order
     end
 
     Result.new(success?: true, errors: [], order: order)
@@ -53,6 +54,14 @@ class OrderPlacement
 
 
   private
+
+  def save_order_items
+    order_items.each(&:save!)
+  end
+
+  def prepare_order
+    OrderPrepService.new(order: order).call
+  end
 
   def build_order
     Order.new(order_items: order_items).tap do |order|

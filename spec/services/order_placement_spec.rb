@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe OrderPlacement do
-  fixtures :menu_items
+  fixtures :menu_items, :stations
 
   describe "#items" do
     it "exposes the provided items as item inputs" do
@@ -53,6 +53,9 @@ RSpec.describe OrderPlacement do
           [menu_items(:milkshake).id, 1]
         ]
       )
+
+      expect(Station.find(1)).to have_attributes(load_seconds: 180)
+      expect(Station.find(2)).to have_attributes(load_seconds: 135)
     end
 
     it "returns errors without creating records when invalid" do
