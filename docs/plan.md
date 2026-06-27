@@ -20,9 +20,10 @@ Vertical Slice 4: Prep Calculation
 [x] Wire it into the order placement service
 [x] Add the estimation and prep_schedule to the response
 
-Vertical Slice 5: Quality of Life Improvements
+Vertical Slice 5: Quality of Life Improvements (Optional)
 [ ] linter
 [ ] bundle security
 [ ] audit db query quality, security
+[ ] use locales vs hardcoding english strings.
 [x] swagger docs
 
