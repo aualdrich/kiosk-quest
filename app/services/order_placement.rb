@@ -18,7 +18,6 @@ class OrderPlacement
   end
 
   def call
-    build_order_items
     apply_pricing
 
     return invalid_result unless valid?
@@ -31,23 +30,17 @@ class OrderPlacement
     Result.new(success?: true, errors: [], order: order)
   end
 
-  private
-
   def order
-    @order ||= Order.new
+    @order ||= Order.new(order_items: order_items)
   end
 
   def order_items
-    build_order_items
-  end
-
-  def build_order_items
     return @order_items if defined?(@order_items)
 
     @order_items = items.map do |item|
       # TODO: could we make this more future-proof by safely allowing new attributes to be added
       # without needing to add them here?
-      order.order_items.build(
+      OrderItem.new(
         menu_item_id: item.item_id,
         quantity: item.qty
       )
