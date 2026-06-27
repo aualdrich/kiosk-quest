@@ -13,6 +13,8 @@ class OrdersController < ApplicationController
   private
 
   def order_items_params
+    return [] unless params.key?(:items)
+
     params.permit(items: [:item_id, :qty]).fetch(:items).map(&:to_h)
   end
 end

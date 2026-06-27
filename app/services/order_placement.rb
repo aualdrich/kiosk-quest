@@ -17,6 +17,7 @@ class OrderPlacement
     end
   end
 
+  validate :items_are_present
   validate :item_ids_exist
   validate :order_items_are_valid
   validate :order_is_valid
@@ -122,6 +123,12 @@ class OrderPlacement
     return if missing_item_ids.empty?
 
     errors.add(:item_ids, "must all exist")
+  end
+
+  def items_are_present
+    return if items.any?
+
+    errors.add(:order_items, "can't be blank")
   end
 
   def order_items_are_valid

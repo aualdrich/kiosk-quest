@@ -89,5 +89,14 @@ RSpec.describe "Orders" do
       expect(response).to have_http_status(:bad_request)
       expect(response_errors).to eq(["Item ids must all exist"])
     end
+
+    it "returns a bad request with errors when items are omitted" do
+      expect do
+        post "/order", params: { order: {} }
+      end.not_to change(Order, :count)
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response_errors).to eq(["Order items can't be blank"])
+    end
   end
 end
