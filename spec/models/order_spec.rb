@@ -16,6 +16,7 @@ RSpec.describe Order, type: :model do
   end
 
   describe "validations" do
+    it { is_expected.to validate_presence_of(:order_items) }
     it { is_expected.to validate_presence_of(:subtotal_cents) }
     it { is_expected.to validate_numericality_of(:subtotal_cents).is_greater_than(0) }
     it { is_expected.to validate_presence_of(:discount_cents) }

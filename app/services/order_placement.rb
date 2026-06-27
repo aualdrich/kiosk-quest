@@ -1,7 +1,13 @@
 # TODO: add docstring describing the purpose of the class and its methods
 class OrderPlacement
+  include ActiveModel::Validations
+
   ItemInput = Struct.new(:item_id, :qty, keyword_init: true)
   Result = Struct.new(:success?, :errors, :order, keyword_init: true)
+
+  validate :item_ids_exist
+  validate :order_items_are_valid
+  validate :order_is_valid
 
   attr_reader :items
 
@@ -18,8 +24,6 @@ class OrderPlacement
   end
 
   def call
-    apply_pricing
-
     return invalid_result unless valid?
 
     ActiveRecord::Base.transaction do
@@ -31,7 +35,7 @@ class OrderPlacement
   end
 
   def order
-    @order ||= Order.new(order_items: order_items)
+    @order ||= build_order
   end
 
   def order_items
@@ -47,12 +51,16 @@ class OrderPlacement
     end
   end
 
-  # TODO: we could probably make the service use active validations
-  def valid?
-    order.valid? & order_items.all?(&:valid?)
+
+  private
+
+  def build_order
+    Order.new(order_items: order_items).tap do |order|
+      apply_pricing(order) if missing_item_ids.empty?
+    end
   end
 
-  def apply_pricing
+  def apply_pricing(order)
     pricing = OrderCalculation.new(order: order).call
 
     order.subtotal_cents = pricing.subtotal_cents
@@ -61,10 +69,40 @@ class OrderPlacement
   end
 
   def invalid_result
-    Result.new(success?: false, errors: errors, order: nil)
+    Result.new(success?: false, errors: errors.full_messages, order: nil)
   end
 
-  def errors
-    order.errors.full_messages + order_items.flat_map { |order_item| order_item.errors.full_messages }
+  def item_ids
+    items.map(&:item_id)
+  end
+
+  def missing_item_ids
+    @missing_item_ids ||= begin
+      existing_item_ids = MenuItem.where(id: item_ids).pluck(:id).map(&:to_s)
+
+      item_ids.map(&:to_s).uniq - existing_item_ids
+    end
+  end
+
+  def item_ids_exist
+    return if missing_item_ids.empty?
+
+    errors.add(:item_ids, "must all exist")
+  end
+
+  def order_items_are_valid
+    order
+
+    order_items.each do |order_item|
+      next if order_item.valid?
+
+      order_item.errors.full_messages.each { |message| errors.add(:base, message) }
+    end
+  end
+
+  def order_is_valid
+    return if order.valid?
+
+    order.errors.full_messages.each { |message| errors.add(:base, message) }
   end
 end

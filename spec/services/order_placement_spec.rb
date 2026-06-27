@@ -69,5 +69,32 @@ RSpec.describe OrderPlacement do
       expect(@result).to have_attributes(success?: false, order: nil)
       expect(@result.errors).to include("Quantity must be greater than 0")
     end
+
+    it "returns errors without creating records when an item id does not exist" do
+      order_placement = described_class.new(
+        items: [
+          { "item_id" => menu_items(:cheeseburger).id, "qty" => 1 },
+          { "item_id" => MenuItem.maximum(:id) + 1, "qty" => 1 }
+        ]
+      )
+
+      expect { @result = order_placement.call }
+        .to change(Order, :count).by(0)
+        .and change(OrderItem, :count).by(0)
+
+      expect(@result).to have_attributes(success?: false, order: nil)
+      expect(@result.errors).to include("Item ids must all exist")
+    end
+
+    it "returns errors without creating records when no items are provided" do
+      order_placement = described_class.new(items: [])
+
+      expect { @result = order_placement.call }
+        .to change(Order, :count).by(0)
+        .and change(OrderItem, :count).by(0)
+
+      expect(@result).to have_attributes(success?: false, order: nil)
+      expect(@result.errors).to include("Order items can't be blank")
+    end
   end
 end
