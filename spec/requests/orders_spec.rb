@@ -95,6 +95,21 @@ RSpec.describe "Orders" do
       expect(response_errors).to include("Quantity can't be blank")
     end
 
+    it "returns a bad request with errors when quantity is omitted" do
+      expect do
+        post "/order",
+          params: {
+            items: [
+              { item_id: menu_items(:cheeseburger).id }
+            ]
+          },
+          as: :json
+      end.not_to change(Order, :count)
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response_errors).to include("Quantity can't be blank")
+    end
+
     it "returns a bad request with errors when quantity is decimal" do
       expect do
         post "/order",

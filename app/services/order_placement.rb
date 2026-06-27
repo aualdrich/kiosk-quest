@@ -32,7 +32,7 @@ class OrderPlacement
   # ]
   def initialize(items:)
     @items = items.map do |item|
-      ItemInput.new(item_id: item.fetch("item_id"), qty: item.fetch("qty"))
+      ItemInput.new(item_id: item["item_id"], qty: item["qty"])
     end
   end
 
