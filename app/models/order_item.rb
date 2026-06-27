@@ -4,5 +4,5 @@ class OrderItem < ApplicationRecord
 
   validates :order, presence: true
   validates :menu_item, presence: true
-  validates :quantity, presence: true, numericality: { greater_than: 0 }
+  validates :quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
 end

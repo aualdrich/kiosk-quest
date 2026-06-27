@@ -98,8 +98,18 @@ paths:
                   value:
                     errors:
                       - Quantity must be greater than 0
+                nil_quantity:
+                  summary: Quantity is null.
+                  value:
+                    errors:
+                      - Quantity can't be blank
                 missing_menu_item:
                   summary: Menu item does not exist.
                   value:
                     errors:
                       - Item ids must all exist
+                missing_items:
+                  summary: Items are omitted.
+                  value:
+                    errors:
+                      - Order items can't be blank

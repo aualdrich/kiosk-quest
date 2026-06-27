@@ -85,8 +85,12 @@ class OrderPlacement
 
   def build_order
     Order.new(order_items: order_items).tap do |order|
-      apply_pricing(order) if missing_item_ids.empty?
+      apply_pricing(order) if can_apply_pricing?
     end
+  end
+
+  def can_apply_pricing?
+    items.any? && missing_item_ids.empty? && order_items.all?(&:valid?)
   end
 
   def apply_pricing(order)
