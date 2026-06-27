@@ -1,0 +1,97 @@
+openapi: 3.1.0
+info:
+  title: Kiosk Quest API
+  version: 1.0.0
+  description: Lightweight API docs for the kiosk order endpoint.
+servers:
+  - url: /
+paths:
+  /order:
+    post:
+      summary: Create an order
+      description: Creates a kiosk order, calculates pricing, and returns the prep estimate.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    required:
+                      - item_id
+                      - qty
+                    properties:
+                      item_id:
+                        type: integer
+                        example: 1
+                      qty:
+                        type: integer
+                        minimum: 1
+                        example: 2
+            example:
+              items:
+                - item_id: 1
+                  qty: 2
+                - item_id: 2
+                  qty: 1
+      responses:
+        "200":
+          description: Order created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - subtotal_cents
+                  - discount_cents
+                  - total_cents
+                  - estimated_prep_seconds
+                  - prep_schedule
+                properties:
+                  subtotal_cents:
+                    type: integer
+                  discount_cents:
+                    type: integer
+                  total_cents:
+                    type: integer
+                  estimated_prep_seconds:
+                    type: integer
+                  prep_schedule:
+                    type: array
+                    items:
+                      type: array
+                      minItems: 2
+                      maxItems: 2
+                      items:
+                        type: integer
+              example:
+                subtotal_cents: 2696
+                discount_cents: 270
+                total_cents: 2426
+                estimated_prep_seconds: 180
+                prep_schedule:
+                  - [1, 180]
+                  - [2, 135]
+        "400":
+          description: Request validation failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - errors
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors:
+                  - Quantity must be greater than 0

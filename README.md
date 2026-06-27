@@ -2,6 +2,15 @@
 
 Kiosk Quest is a Ruby on Rails API-only take-home exercise for a kiosk order service.
 
+## API Documentation
+
+This repository uses a lightweight OpenAPI document and a tiny static docs page as the source of truth for API docs.
+
+- OpenAPI spec: [`public/openapi.yml`](./public/openapi.yml)
+- Docs page: [`/docs/`](./public/docs/index.html)
+
+Use those docs whenever the request or response shape changes, and keep them in sync with the endpoint implementation.
+
 ## Version Management
 
 This repo uses [`.tool-versions`](./.tool-versions) as the source of truth for language versions.

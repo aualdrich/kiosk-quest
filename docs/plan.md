@@ -24,4 +24,5 @@ Vertical Slice 5: Quality of Life Improvements
 [ ] linter
 [ ] bundle security
 [ ] audit db query quality, security
+[x] swagger docs
 
