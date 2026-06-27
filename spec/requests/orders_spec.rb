@@ -30,6 +30,15 @@ RSpec.describe "Orders" do
       #   fries line prep = 1 x 60 = 60 -> station 2
       #   milkshake line prep = 1 x 75 = 75 -> station 2 (60 < 180)
       # station loads end at 180 and 135, so estimated prep = 180 seconds
+      expect(response_json.keys).to eq(
+        %w[
+          subtotal_cents
+          discount_cents
+          total_cents
+          estimated_prep_seconds
+          prep_schedule
+        ]
+      )
       expect(response_json).to eq(
         "subtotal_cents" => 2_696,
         "discount_cents" => 270,
