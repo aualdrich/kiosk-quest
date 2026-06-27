@@ -21,3 +21,14 @@ menu_items.each do |attributes|
   menu_item.assign_attributes(attributes)
   menu_item.save!
 end
+
+stations = [
+  { name: "Station 1", load_seconds: 0 },
+  { name: "Station 2", load_seconds: 0 }
+]
+
+stations.each do |attributes|
+  station = Station.find_or_initialize_by(name: attributes[:name])
+  station.assign_attributes(attributes)
+  station.save!
+end
