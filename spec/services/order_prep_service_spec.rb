@@ -34,8 +34,14 @@ RSpec.describe OrderPrepService do
 
       expect(station_1 = Station.find(1)).to have_attributes(load_seconds: 180)
       expect(station_2 = Station.find(2)).to have_attributes(load_seconds: 135)
-      expect(result).to have_attributes(success?: true, errors: [], estimated_prep_seconds: 180)
+      expect(result).to have_attributes(
+        success?: true,
+        errors: [],
+        estimated_prep_seconds: 180,
+        prep_schedule: [[1, 180], [2, 135]]
+      )
       expect(result.estimated_prep_seconds).to eq(180)
+      expect(result.prep_schedule).to eq([[1, 180], [2, 135]])
     end
   end
 end

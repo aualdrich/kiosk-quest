@@ -53,9 +53,11 @@ RSpec.describe OrderPlacement do
         subtotal_cents: 2_696,
         discount_cents: 270,
         total_cents: 2_426,
-        estimated_prep_seconds: 180
+        estimated_prep_seconds: 180,
+        prep_schedule: [[1, 180], [2, 135]]
       )
       expect(@result.estimated_prep_seconds).to eq(180)
+      expect(@result.prep_schedule).to eq([[1, 180], [2, 135]])
 
       order = Order.includes(:order_items).find(@result.order.id)
 
