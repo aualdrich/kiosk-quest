@@ -101,7 +101,7 @@ RSpec.describe OrderPlacement do
         .and change(OrderItem, :count).by(0)
 
       expect(@result).to have_attributes(success?: false, order: nil)
-      expect(@result.errors).to include("Item ids must all exist")
+      expect(@result.errors).to eq(["Item ids must all exist"])
     end
 
     it "returns errors without creating records when no items are provided" do

@@ -87,7 +87,7 @@ RSpec.describe "Orders" do
       end.not_to change(Order, :count)
 
       expect(response).to have_http_status(:bad_request)
-      expect(response_errors).to include("Item ids must all exist")
+      expect(response_errors).to eq(["Item ids must all exist"])
     end
   end
 end

@@ -125,6 +125,8 @@ class OrderPlacement
   end
 
   def order_items_are_valid
+    return if missing_item_ids.any?
+
     order
 
     order_items.each do |order_item|
@@ -135,6 +137,7 @@ class OrderPlacement
   end
 
   def order_is_valid
+    return if errors.any?
     return if order.valid?
 
     order.errors.full_messages.each { |message| errors.add(:base, message) }

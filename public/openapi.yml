@@ -92,6 +92,14 @@ paths:
                     type: array
                     items:
                       type: string
-              example:
-                errors:
-                  - Quantity must be greater than 0
+              examples:
+                invalid_quantity:
+                  summary: Quantity is invalid.
+                  value:
+                    errors:
+                      - Quantity must be greater than 0
+                missing_menu_item:
+                  summary: Menu item does not exist.
+                  value:
+                    errors:
+                      - Item ids must all exist
