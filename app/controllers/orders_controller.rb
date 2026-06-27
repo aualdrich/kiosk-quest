@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
       return
     end
 
-    render json: OrderBlueprint.render(result.order)
+    render json: OrderPlacedBlueprint.render(result)
   end
 
   private

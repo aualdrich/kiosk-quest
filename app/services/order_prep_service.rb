@@ -1,10 +1,14 @@
 class OrderPrepService
+  Result = Struct.new(:success?, :errors, :estimated_prep_seconds, keyword_init: true)
+
   def initialize(order:)
     @order = order
   end
 
   def call
     assign_station_load
+
+    Result.new(success?: true, errors: [], estimated_prep_seconds: estimated_prep_seconds)
   end
 
   private
@@ -20,5 +24,9 @@ class OrderPrepService
       station.load_seconds += line_prep
       station.save!
     end
+  end
+
+  def estimated_prep_seconds
+    Station.maximum(:load_seconds)
   end
 end

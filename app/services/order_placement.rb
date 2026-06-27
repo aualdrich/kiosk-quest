@@ -3,7 +3,19 @@ class OrderPlacement
   include ActiveModel::Validations
 
   ItemInput = Struct.new(:item_id, :qty, keyword_init: true)
-  Result = Struct.new(:success?, :errors, :order, keyword_init: true)
+  Result = Struct.new(:success?, :errors, :order, :estimated_prep_seconds, keyword_init: true) do
+    def subtotal_cents
+      order&.subtotal_cents
+    end
+
+    def discount_cents
+      order&.discount_cents
+    end
+
+    def total_cents
+      order&.total_cents
+    end
+  end
 
   validate :item_ids_exist
   validate :order_items_are_valid
@@ -26,13 +38,14 @@ class OrderPlacement
   def call
     return invalid_result unless valid?
 
+    prep_result = nil
     ActiveRecord::Base.transaction do
       order.save!
       save_order_items
-      prepare_order
+      prep_result = prepare_order
     end
 
-    Result.new(success?: true, errors: [], order: order)
+    Result.new(success?: true, errors: [], order: order, estimated_prep_seconds: prep_result.estimated_prep_seconds)
   end
 
   def order
@@ -78,7 +91,7 @@ class OrderPlacement
   end
 
   def invalid_result
-    Result.new(success?: false, errors: errors.full_messages, order: nil)
+    Result.new(success?: false, errors: errors.full_messages, order: nil, estimated_prep_seconds: nil)
   end
 
   def item_ids

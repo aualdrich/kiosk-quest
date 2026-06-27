@@ -30,10 +30,12 @@ RSpec.describe OrderPrepService do
     end
 
     it "assigns each order item line prep to the least loaded station" do
-      described_class.new(order:).call
+      result = described_class.new(order:).call
 
       expect(station_1 = Station.find(1)).to have_attributes(load_seconds: 180)
       expect(station_2 = Station.find(2)).to have_attributes(load_seconds: 135)
+      expect(result).to have_attributes(success?: true, errors: [], estimated_prep_seconds: 180)
+      expect(result.estimated_prep_seconds).to eq(180)
     end
   end
 end

@@ -19,10 +19,22 @@ RSpec.describe "Orders" do
         .and change(OrderItem, :count).by(3)
 
       expect(response).to have_http_status(:ok)
+      # 2 x cheeseburger = 2 x 899 = 1_798
+      # 1 x fries = 399
+      # 1 x milkshake = 499
+      # subtotal = 1_798 + 399 + 499 = 2_696
+      # discount = 10% of 2_696 = 269.6, rounded to 270
+      # total = 2_696 - 270 = 2_426
+      # prep stations start at 0:
+      #   cheeseburger line prep = 2 x 90 = 180 -> station 1
+      #   fries line prep = 1 x 60 = 60 -> station 2
+      #   milkshake line prep = 1 x 75 = 75 -> station 2 (60 < 180)
+      # station loads end at 180 and 135, so estimated prep = 180 seconds
       expect(response_json).to eq(
         "subtotal_cents" => 2_696,
         "discount_cents" => 270,
-        "total_cents" => 2_426
+        "total_cents" => 2_426,
+        "estimated_prep_seconds" => 180
       )
 
       order = Order.includes(:order_items).last
