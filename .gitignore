@@ -1,0 +1,27 @@
+# OS cruft
+.DS_Store
+
+# Ruby/Bundler
+.bundle/
+vendor/bundle/
+
+# Rails runtime files
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+!/tmp/cache/
+/tmp/cache/*
+!/tmp/cache/.keep
+!/tmp/pids/
+/tmp/pids/*
+!/tmp/pids/.keep
+!/tmp/storage/
+/storage/*
+!/storage/.keep
+/storage/*.sqlite3*
+
+# Local environment files
+.env
+.env.*
+.ruby-version
