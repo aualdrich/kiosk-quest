@@ -36,16 +36,14 @@ class OrderPlacement
   end
 
   def order_items
-    @order_items ||= items.map { |item| order_item(item) }
-  end
-
-  def order_item(item)
-    # TODO: could we make this more future-proof by safely allowing new attributes to be added
-    # without needing to add them here?
-    order.order_items.build(
-      menu_item_id: item.item_id,
-      quantity: item.qty
-    )
+    @order_items ||= items.map do |item|
+      # TODO: could we make this more future-proof by safely allowing new attributes to be added
+      # without needing to add them here?
+      order.order_items.build(
+        menu_item_id: item.item_id,
+        quantity: item.qty
+      )
+    end
   end
 
   # TODO: we could probably make the service use active validations
