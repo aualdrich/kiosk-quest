@@ -18,6 +18,9 @@ class OrderPlacement
   end
 
   def call
+    build_order_items
+    apply_pricing
+
     return invalid_result unless valid?
 
     ActiveRecord::Base.transaction do
@@ -31,12 +34,17 @@ class OrderPlacement
   private
 
   def order
-    # TODO: Calculate order totals from the requested menu items.
-    @order ||= Order.new(subtotal_cents: 1, discount_cents: 1, total_cents: 1)
+    @order ||= Order.new
   end
 
   def order_items
-    @order_items ||= items.map do |item|
+    build_order_items
+  end
+
+  def build_order_items
+    return @order_items if defined?(@order_items)
+
+    @order_items = items.map do |item|
       # TODO: could we make this more future-proof by safely allowing new attributes to be added
       # without needing to add them here?
       order.order_items.build(
@@ -49,6 +57,14 @@ class OrderPlacement
   # TODO: we could probably make the service use active validations
   def valid?
     order.valid? & order_items.all?(&:valid?)
+  end
+
+  def apply_pricing
+    pricing = OrderCalculation.new(order: order).call
+
+    order.subtotal_cents = pricing.subtotal_cents
+    order.discount_cents = pricing.discount_cents
+    order.total_cents = pricing.total_cents
   end
 
   def invalid_result

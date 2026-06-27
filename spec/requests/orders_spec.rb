@@ -20,9 +20,9 @@ RSpec.describe "Orders" do
 
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)).to eq(
-        "subtotal_cents" => 1,
-        "discount_cents" => 1,
-        "total_cents" => 1
+        "subtotal_cents" => 2_696,
+        "discount_cents" => 270,
+        "total_cents" => 2_426
       )
 
       order = Order.includes(:order_items).last

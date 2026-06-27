@@ -38,6 +38,11 @@ RSpec.describe OrderPlacement do
         .and change(OrderItem, :count).by(3)
 
       expect(@result).to have_attributes(success?: true, errors: [], order: be_present)
+      expect(@result.order).to have_attributes(
+        subtotal_cents: 2_696,
+        discount_cents: 270,
+        total_cents: 2_426
+      )
 
       order = Order.includes(:order_items).find(@result.order.id)
 
