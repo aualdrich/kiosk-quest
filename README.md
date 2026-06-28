@@ -1,17 +1,10 @@
 # Kiosk Quest
 
-Kiosk Quest is a Ruby on Rails API-only take-home exercise for a kiosk order service.
+Kiosk Quest is a Ruby on Rails app designed to simulate a restauraunt order API endpoint.
 
-## API Documentation
+## Getting Started
 
-This repository uses a lightweight OpenAPI document and a tiny static docs page as the source of truth for API docs.
-
-- OpenAPI spec: [`public/openapi.yml`](./public/openapi.yml)
-- Docs page: [`/docs/`](./public/docs/index.html)
-
-Use those docs whenever the request or response shape changes, and keep them in sync with the endpoint implementation.
-
-## Version Management
+### Setting up Ruby
 
 This repo uses [`.tool-versions`](./.tool-versions) as the source of truth for language versions.
 
@@ -19,7 +12,7 @@ Current pinned versions:
 
 - Ruby `3.4.9`
 
-You can install the pinned languages with either `mise` or `asdf`:
+You can install the pinned languages with either [`mise`](https://mise.jdx.dev/) or [`asdf`](https://asdf-vm.com/):
 
 - `mise install`
 - `asdf install`
@@ -32,31 +25,35 @@ If you use `mise`, make sure your shell is activated so the shims are on your pa
 eval "$(mise activate zsh)"
 ```
 
-## Running the App
+### Installing Dependencies & Database
 
-`bin/setup` installs dependencies, prepares the database (creating it, loading the schema, and seeding it on first run), and starts the server:
+To install dependencies, prepare the database (creating it, loading the schema, and seeding it on first run), 
+and start the server, run:
 
-```bash
-bin/setup
-```
+`bin/setup`
 
-If you just want to set up the app without starting the server, pass `--skip-server`:
+### Running the Server
 
-```bash
-bin/setup --skip-server
-```
-
-This app is configured as API-only, so it uses `ActionController::API` and skips browser-focused Rails features by default.
+`bin/dev`
 
 ## Running Tests
+
+This is an app that could be used by potentially tens of thousands of kiosks.
+It is vital that all functionality is covered by tests (unit and request specs).
+
+We use Rspec for testing.
+
+To run tests:
 
 ```bash
 bundle exec rspec
 ```
 
-This repository uses RSpec for testing.
+## API Documentation
 
-## Notes
+To view the API docs, boot up the app then visit [/docs](http://localhost:3000/docs).
 
-- `mise.toml` mirrors the Ruby pin for `mise` users.
-- `.tool-versions` keeps the version manager setup compatible with `asdf`.
+- OpenAPI spec: [`public/openapi.yml`](./public/openapi.yml)
+- Docs page: [`/docs/`](./public/docs/index.html)
+
+Use those docs whenever the request or response shape changes, and keep them in sync with the endpoint implementation.
