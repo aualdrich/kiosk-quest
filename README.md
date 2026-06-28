@@ -36,7 +36,7 @@ and start the server, run:
 
 `bin/dev`
 
-## Running Tests
+## Testing
 
 This is an app that could be used by potentially tens of thousands of kiosks.
 It is vital that all functionality is covered by tests (unit and request specs).
