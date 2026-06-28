@@ -34,11 +34,16 @@ eval "$(mise activate zsh)"
 
 ## Running the App
 
-Install dependencies, then start the app:
+`bin/setup` installs dependencies, prepares the database (creating it, loading the schema, and seeding it on first run), and starts the server:
 
 ```bash
-bundle install
-bin/rails server
+bin/setup
+```
+
+If you just want to set up the app without starting the server, pass `--skip-server`:
+
+```bash
+bin/setup --skip-server
 ```
 
 This app is configured as API-only, so it uses `ActionController::API` and skips browser-focused Rails features by default.
